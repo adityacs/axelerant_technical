@@ -1,0 +1,45 @@
+---
+- name: Block Root Login
+  lineinfile:
+    path: /etc/ssh/sshd_config_backup
+    regexp: '^PermitRootLogin'
+    line: 'PermitRootLogin no'
+
+- name: concat AllowUsers
+  shell: "grep -R \"AllowUsers\" /etc/ssh/sshd_config_backup"
+  register: allow_concat
+  ignore_errors: true
+
+- set_fact: replace_allow_line="{{allow_concat.stdout}} {{user}}"
+  when: allow_concat.stdout != ""
+
+- set_fact: replace_allow_line="AllowUsers {{user}}"
+  when: allow_concat.stdout == ""
+
+- name: Replace AllowUser content
+  lineinfile:
+    path: /etc/ssh/sshd_config_backup
+    regexp: '^AllowUsers'
+    line: "{{replace_allow_line}}"
+  when: access == "grant"
+
+- name: concat DenyUsers
+  shell: "grep -R \"DenyUsers\" /etc/ssh/sshd_config_backup"
+  register: deny_concat
+  ignore_errors: true
+
+- set_fact: replace_deny_line="{{deny_concat.stdout}} {{user}}"
+  when: deny_concat.stdout != ""
+
+- set_fact: replace_deny_line="DenyUsers {{user}}"
+  when: deny_concat.stdout == ""
+
+- name: Replace DenyUser content
+  lineinfile:
+    path: /etc/ssh/sshd_config_backup
+    regexp: '^DenyUsers'
+    line: "{{replace_deny_line}}"
+  when: access == "revoke"
+
+- name: Restart SSHD
+  service: name=sshd state=restarted
