@@ -45,3 +45,4 @@
 
 - name: Restart SSHD
   service: name=sshd state=restarted
+  when: access == "grant" or access == "revoke"
