@@ -18,7 +18,7 @@
 
 - name: Replace AllowUser content
   lineinfile:
-    path: /etc/ssh/sshd_config_backup
+    path: /etc/ssh/sshd_config
     regexp: '^AllowUsers'
     line: "{{replace_allow_line}}"
   when: access == "grant"
