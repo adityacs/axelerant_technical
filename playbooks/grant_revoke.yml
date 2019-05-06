@@ -1,4 +1,4 @@
 ---
-- hosts: 127.0.0.1
+- hosts: grant_revoke_servers
   roles:
-   - /tmp/aditya/grant_revoke/roles/grant_revoke
+   - grant_revoke
