@@ -1,12 +1,12 @@
 ---
 - name: Block Root Login
   lineinfile:
-    path: /etc/ssh/sshd_config_backup
+    path: /etc/ssh/sshd_config
     regexp: '^PermitRootLogin'
     line: 'PermitRootLogin no'
 
 - name: concat AllowUsers
-  shell: "grep -R \"AllowUsers\" /etc/ssh/sshd_config_backup"
+  shell: "grep -R \"AllowUsers\" /etc/ssh/sshd_config"
   register: allow_concat
   ignore_errors: true
 
@@ -24,7 +24,7 @@
   when: access == "grant"
 
 - name: concat DenyUsers
-  shell: "grep -R \"DenyUsers\" /etc/ssh/sshd_config_backup"
+  shell: "grep -R \"DenyUsers\" /etc/ssh/sshd_config"
   register: deny_concat
   ignore_errors: true
 
@@ -36,7 +36,7 @@
 
 - name: Replace DenyUser content
   lineinfile:
-    path: /etc/ssh/sshd_config_backup
+    path: /etc/ssh/sshd_config
     regexp: '^DenyUsers'
     line: "{{replace_deny_line}}"
   when: access == "revoke"
