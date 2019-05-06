@@ -1,5 +1,8 @@
 # axelerant_technical
 
+Code is written in Ansible. The main file can be found in ./roles/grant_revoke/tasks/main.yml.
+"Access permissions" and the "user" are taken as variable to ansible script. Below are the steps to run the code
+
 ## Steps to run the code
 1. Make sure Ansible is installed in the system. Installation instructions can be found here, [ansible_install](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html#latest-releases-via-pip)
 2. Clone the repository as below
